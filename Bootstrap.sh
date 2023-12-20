@@ -13,16 +13,16 @@ export PUBLIC_IP_NAME="myPublicIP"
 export DOCKER_IMAGE_NAME="zpa"
 export DISK_SIZE="20g"
 
-git clone https://github.com/domeger/test2.git /home/admin_overall/test2/
+git clone https://github.com/domeger/AnjunaProtectedZPA-Docker.git /home/admin_overall/ZPA/
 
-cd /home/admin_overall/test2/
+cd /home/admin_overall/ZPA/
 
 docker build . -t ${DOCKER_IMAGE_NAME}
 
 echo "Logging into Azure with Managed Identity"
 az login --identity
 
-echo "Creating a disk from the Docker image BeeKeeperAI"
+echo "Creating a disk from the Docker image ZPA"
 anjuna-azure-cli disk create --docker-uri=${DOCKER_IMAGE_NAME} --disk-size ${DISK_SIZE}
 
 echo "Getting the Azure subscription details"
@@ -66,7 +66,7 @@ az network public-ip create --resource-group ${RESOURCE_GROUP_NAME} --name ${PUB
 az network nic create --resource-group ${RESOURCE_GROUP_NAME} --name ${NIC_NAME} --vnet-name ${VNET_NAME} --subnet ${SUBNET_NAME} --network-security-group ${NSG_NAME} --public-ip-address ${PUBLIC_IP_NAME}
 
 echo "Creating an instance of the image"
-export INSTANCE_NAME=anjuna-azure-beekeeper-instance && anjuna-azure-cli instance create --name ${INSTANCE_NAME} --location ${LOCATION} --image-gallery myGallery1 --image-definition myFirstDefinition --image-version 0.1.0 --resource-group myResourceGroup --storage-account ${STORAGE_ACCOUNT_NAME} --nics myNic
+export INSTANCE_NAME=anjuna-azure-zpa-instance && anjuna-azure-cli instance create --name ${INSTANCE_NAME} --location ${LOCATION} --image-gallery myGallery1 --image-definition myFirstDefinition --image-version 0.1.0 --resource-group myResourceGroup --storage-account ${STORAGE_ACCOUNT_NAME} --nics myNic
 
 echo "Describing the created instance"
 anjuna-azure-cli instance describe --name ${INSTANCE_NAME} --resource-group ${RESOURCE_GROUP_NAME}
